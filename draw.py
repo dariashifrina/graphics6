@@ -16,33 +16,40 @@ def add_box( points, x, y, z, width, height, depth ):
     add_edge( points, x, y + height, z + depth, x + width, y + height, z + depth )
     add_edge( points, x + width, y, z + depth, x + width, y + height, z + depth )
     add_edge( points, x, y, z + depth, x + width, y, z + depth )
-    draw_lines( points, screen, color )
-    pass
 
 def add_sphere( points, cx, cy, cz, r, step ):
-    theta = 0
-    phi = 0
-    or_x = cx
-    or_y = cy
-    or_z = cz
-    add_circle(points, or_x, or_y, or_z, r, step)
-    for phi in range(0, 2 * math.pi):
-        for theta in range(0, math.pi):
+    sphere_mat = generate_sphere(points, cx, cy, cz, r, step)
+    for point in sphere_mat:
+        add_edge(points, point[0], point[1], point[2], point[0] + 1, point[1], point[2])
+            
+def generate_sphere( points, cx, cy, cz, r, step ):
+    sphere_mat = []
+    for i in range(0, step):
+        phi = 2 * math.pi * float(i)/step
+        for j in range(0, step):
+            theta = math.pi * float(j)/step
             x0 = r * math.cos(theta) + cx
             y0 = r * math.sin(theta) * math.cos(phi) + cy
             z0 = r * math.sin(theta) * math.sin(phi) + cz
-            add_edge(points, or_x, or_y, or_z, x0, y0, z0)
-            or_x = x0
-            or_y = y0
-            or_z = z0
-            
-def generate_sphere( points, cx, cy, cz, r, step ):
-    pass
+            add_point(sphere_mat, x0, y0, z0)
+    return sphere_mat
 
 def add_torus( points, cx, cy, cz, r0, r1, step ):
-    pass
+    torus_mat = generate_torus(points, cx, cy, cz, r0, r1, step)
+    for point in torus_mat:
+        add_edge(points, point[0], point[1], point[2], point[0] + 1, point[1], point[2])
+
 def generate_torus( points, cx, cy, cz, r0, r1, step ):
-    pass
+    torus_mat = []
+    for i in range(0, step):
+        phi = 2 * math.pi * float(i)/step
+        for j in range(0, step):
+            theta = 2 * math.pi * float(j)/step
+            x0 = math.cos(phi) * (r1 + r0 * math.cos(theta)) + cx
+            y0 = r0 * math.sin(theta) + cy
+            z0 = -1 * math.sin(phi) * (r1 + r0 * math.cos(theta)) + cz
+            add_point(torus_mat, x0, y0, z0)
+    return torus_mat
 
 def add_circle( points, cx, cy, cz, r, step ):
     x0 = r + cx

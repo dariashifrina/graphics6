@@ -44,7 +44,7 @@ The file follows the following format:
 
 See the file script for an example of the file format
 """
-ARG_COMMANDS = [ 'line', 'scale', 'move', 'rotate', 'save', 'circle', 'bezier', 'hermite', 'sphere' ]
+ARG_COMMANDS = [ 'line', 'scale', 'move', 'rotate', 'save', 'circle', 'bezier', 'hermite', 'sphere', 'torus', 'box' ]
 
 def parse_file( fname, edges, transform, screen, color ):
 
@@ -66,10 +66,20 @@ def parse_file( fname, edges, transform, screen, color ):
             add_circle(edges,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step)
-        if line == 'sphere':
+        elif line == 'sphere':
             add_sphere(edges,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step)
+
+        elif line == 'torus':
+            add_torus(edges,
+                       float(args[0]), float(args[1]), float(args[2]),
+                       float(args[3]),float(args[4]), step)
+
+        elif line == 'box':
+            add_box(edges,
+                       float(args[0]), float(args[1]), float(args[2]),
+                       float(args[3]),float(args[4]), float(args[5]))
             
         elif line == 'hermite' or line == 'bezier':
             #print 'curve\t' + line + ": " + str(args)
